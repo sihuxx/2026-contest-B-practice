@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>header</title>
+  <style>
+    * {margin: 0;padding: 0;list-style: none;text-decoration: none;color: inherit;box-sizing: border-box;}
+    header {display: flex;justify-content: center;align-items: center;}
+
+    .has-sub {position: relative;} /* 얘가 있어야 메뉴 부분 안에서 포커스 됨 */
+
+    .focus-trap {position: absolute;inset: 0;opacity: 0;z-index: 5;} /* 부모 li를 다 감싸고 클릭했을 때 제일 먼저 선택되도록 위로 올림 */
+    .sub {max-height: 0;opacity: 0;overflow: hidden;transition: .3s;} 
+
+    .focus-trap:focus ~ .sub{max-height: 200px;opacity: 1;}
+    .has-sub:not(:hover) .focus-trap {animation: kill-focus .001s forwards;} /* li를 호버를 벗어났을 때 kill-focus 애니메이션 실행 */
+    /* .001s 동안 display를 none으로 바꿨다가 block으로 바꿔서 focus 상태를 풀어버림 */
+
+    .menu-label::after {position: absolute;content: "+";display: inline-block;transition: .3s;}
+    .focus-trap:focus ~ .menu-label::after {top: 5px; content: "-";transform: rotate(180deg);}
+    /* + -> - 요소 전환 */
+    @keyframes kill-focus {
+      from {display: none;} to {display: block;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li class="has-sub">
+          <input class="focus-trap">
+          <label class="menu-label">메인 메뉴</label>
+          <ul class="sub">
+            <li><a href="#">서브 메뉴</a></li>
+            <li><a href="#">서브 메뉴</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+</body>
+</html>
