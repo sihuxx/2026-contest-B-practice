@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -170,4 +170,230 @@
   </footer>
 </body>
 
+</html> -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>도서관 소개 | 스킬스북도서관</title>
+  <style>
+    /* 1. 기본 설정 (Reset) */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Malgun Gothic', sans-serif; background-color: #F9F6F0; color: #2D322F; line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    :root {
+      --main-green: #436850;
+      --point-mint: #9AD0C2;
+      --white: #ffffff;
+      --bg-sand: #F1EFE7;
+    }
+
+    /* 2. 헤더 영역 */
+    header { width: 100%; height: 80px; background: var(--white); display: flex; justify-content: space-between; align-items: center; padding: 0 50px; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 1000; }
+    .nav { display: flex; gap: 40px; }
+    .nav > ul > li { position: relative; font-weight: bold; cursor: pointer; padding: 10px 0; }
+    .nav > ul > li:hover { color: var(--main-green); }
+    
+    /* 서브메뉴 (CSS로만 제어) */
+    .sub { position: absolute; top: 100%; left: 0; background: var(--white); width: 160px; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-radius: 0 0 10px 10px; }
+    .nav > ul > li:hover .sub { display: block; }
+    .sub li { padding: 12px 20px; font-size: 14px; border-bottom: 1px solid #f5f5f5; transition: 0.3s; }
+    .sub li:hover { background: var(--bg-sand); color: var(--main-green); }
+
+    /* 3. 서브 비주얼 (CSS 패턴 애니메이션 포함) */
+    .sub-visual { 
+      width: 100%; height: 280px; 
+      background: linear-gradient(135deg, var(--main-green) 0%, #2D322F 100%); 
+      display: flex; flex-direction: column; align-items: center; justify-content: center; 
+      color: var(--white); position: relative; overflow: hidden;
+    }
+    .sub-visual h2 { font-size: 45px; z-index: 1; letter-spacing: 5px; font-weight: 900; }
+    .sub-visual::before {
+      content: "HISTORY"; position: absolute; font-size: 150px; font-weight: 900;
+      color: rgba(255,255,255,0.03); bottom: -30px; right: -20px;
+    }
+
+    /* 4. 본문 컨테이너 */
+    .container { max-width: 1100px; margin: 0 auto; padding: 100px 20px; }
+    .section-title { margin-bottom: 60px; border-left: 6px solid var(--point-mint); padding-left: 20px; }
+    .section-title h2 { font-size: 32px; color: var(--main-green); }
+
+    /* 5. 설립 목적 (이미지 호버 동적 효과) */
+    .purpose-section { display: flex; gap: 50px; align-items: center; margin-bottom: 150px; }
+    .img-box { flex: 1; position: relative; }
+    .img-box img { width: 100%; border-radius: 20px; transition: 0.5s; z-index: 2; position: relative; }
+    .img-box::after { content: ""; position: absolute; top: 20px; left: 20px; width: 100%; height: 100%; background: var(--point-mint); border-radius: 20px; z-index: 1; transition: 0.5s; }
+    .img-box:hover img { transform: translate(-15px, -15px); }
+    .img-box:hover::after { transform: translate(10px, 10px); opacity: 0.5; }
+    
+    .purpose-text { flex: 1.2; font-size: 19px; line-height: 1.9; word-break: keep-all; }
+    .purpose-text strong { color: var(--main-green); font-size: 22px; display: block; margin-bottom: 10px; }
+
+    /* 6. 도서관 역사 (JS 없이 작동하는 스크롤 효과 대용 애니메이션) */
+    .timeline { position: relative; }
+    .timeline-item { 
+      display: flex; gap: 40px; margin-bottom: 80px; 
+      opacity: 0; transform: translateY(40px);
+      animation: revealItem 0.8s ease-out forwards;
+    }
+    
+    /* 순차적 등장 딜레이 설정 */
+    .timeline-item:nth-child(1) { animation-delay: 0.2s; }
+    .timeline-item:nth-child(2) { animation-delay: 0.4s; }
+    .timeline-item:nth-child(3) { animation-delay: 0.6s; }
+    .timeline-item:nth-child(4) { animation-delay: 0.8s; }
+    .timeline-item:nth-child(5) { animation-delay: 1.0s; }
+    .timeline-item:nth-child(6) { animation-delay: 1.2s; }
+
+    @keyframes revealItem {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .year-side { flex: 0.3; text-align: right; }
+    .year-side span { font-size: 35px; font-weight: 900; color: var(--main-green); position: sticky; top: 120px; }
+    
+    .content-side { 
+      flex: 1.7; background: var(--white); padding: 35px; border-radius: 20px; 
+      box-shadow: 10px 10px 25px rgba(0,0,0,0.03); border-left: 5px solid var(--point-mint);
+      transition: 0.3s;
+    }
+    .content-side:hover { transform: scale(1.02); box-shadow: 15px 15px 35px rgba(154, 208, 194, 0.2); }
+    
+    .history-row { display: flex; margin-bottom: 15px; border-bottom: 1px dashed #eee; padding-bottom: 10px; }
+    .history-row:last-child { border-bottom: none; margin-bottom: 0; }
+    .h-date { font-weight: bold; color: var(--main-green); min-width: 100px; font-size: 17px; }
+    .h-txt { font-size: 16px; color: #444; }
+    .h-txt b { color: #000; display: block; margin-bottom: 5px; }
+
+    /* 7. 푸터 영역 */
+    footer { background: #2D322F; color: #ccc; padding: 60px 50px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-left p { margin-bottom: 5px; font-size: 14px; }
+    .sns-area { display: flex; gap: 20px; }
+    .sns-icon { width: 45px; height: 45px; background: #444; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; transition: 0.4s; cursor: pointer; }
+    .sns-icon:hover { background: var(--point-mint); transform: translateY(-10px); color: var(--main-green); }
+
+    /* 반응형 조절 */
+    @media (max-width: 900px) {
+      .purpose-section { flex-direction: column; }
+      .timeline-item { flex-direction: column; gap: 10px; }
+      .year-side { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo"><a href="#"><strong>SKILLSBOOK</strong></a></div>
+    <nav class="nav">
+      <ul>
+        <li>도서관소개
+          <ul class="sub">
+            <li>도서관소개</li>
+            <li>도서관현황</li>
+          </ul>
+        </li>
+      </ul>
+      <ul><li>도서자료실</li></ul>
+      <ul><li>회원서비스</li></ul>
+    </nav>
+  </header>
+
+  <div class="sub-visual">
+    <h2>도서관 소개</h2>
+  </div>
+
+  <main class="container">
+    <section class="purpose-section">
+      <div class="img-box">
+        <img src="./asset/images/images (7).jpg" alt="도서관 전경">
+      </div>
+      <div class="purpose-text">
+        <div class="section-title"><h2>설립 목적 및 사업 소개</h2></div>
+        <strong>"산업경쟁력을 높이는 숙련기술의 요람"</strong>
+        <p>
+          국민에게 산업에 필요한 숙련기술의 습득을 장려하고 숙련기술의 향상을 촉진하는 동시에 숙련기술자에 대한 사회적 인식을 높임으로써 숙련기술자의 경제적·사회적 지위를 향상시키고 산업경쟁력을 높이는 것을 목적으로 합니다.
+        </p>
+      </div>
+    </section>
+
+    <section class="history-section">
+      <div class="section-title"><h2>도서관 역사</h2></div>
+      
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="year-side"><span>2024</span></div>
+          <div class="content-side">
+            <div class="history-row">
+              <div class="h-date">06. 28</div>
+              <div class="h-txt"><b>스킬스북도서관 재개관</b> SOC리모델링 완료 및 정식 오픈</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year-side"><span>2021</span></div>
+          <div class="content-side">
+            <div class="history-row">
+              <div class="h-date">05 ~ 08</div>
+              <div class="h-txt">△△도서관 시설개선사업 실시</div>
+            </div>
+            <div class="history-row">
+              <div class="h-date">2020. 03</div>
+              <div class="h-txt">△△기적의도서관 시설 개보수 (담장 교체 작업)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year-side"><span>2019</span></div>
+          <div class="content-side">
+            <div class="history-row">
+              <div class="h-date">08. 28</div>
+              <div class="h-txt"><b>◎◎도서관 신규 개관</b></div>
+            </div>
+            <div class="history-row">
+              <div class="h-date">07. 01</div>
+              <div class="h-txt">
+                <b>조직개편 및 소속 분관 변경</b>
+                • △△도서관과 신설 및 관리 업무 이관<br>
+                • 서울, 대전, 부산, 광주 분관 소속 변경<br>
+                • 인천, 경기, 강원, 전북, 울산 분관 관리
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year-side"><span>2015</span></div>
+          <div class="content-side">
+            <div class="history-row">
+              <div class="h-date">07. 08</div>
+              <div class="h-txt">조직 및 도서관 명칭 변경 (도서관평생학습본부 발족)</div>
+            </div>
+            <div class="history-row">
+              <div class="h-date">2014. 03</div>
+              <div class="h-txt">○○도서관 최초 개관</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-left">
+      <p>경기도 부천시 원미구 (제공된 footer.txt 내용 참고)</p>
+      <p>Copyright 2026. 스킬스북도서관 All rights reserved.</p>
+    </div>
+    <div class="sns-area">
+      <div class="sns-icon">f</div>
+      <div class="sns-icon">t</div>
+      <div class="sns-icon">i</div>
+    </div>
+  </footer>
+
+</body>
 </html>
